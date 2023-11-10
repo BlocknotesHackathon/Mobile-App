@@ -5,6 +5,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useWalletConnectModal } from '@walletconnect/modal-react-native'
 import Swiper from 'react-native-swiper'
 
+import AnnounceImage1 from '../assets/announces/1.png'
+import AnnounceImage2 from '../assets/announces/2.png'
+import AnnounceImage3 from '../assets/announces/3.png'
+
+const announces = {
+	1: AnnounceImage1,
+	2: AnnounceImage2,
+	3: AnnounceImage3,
+}
+
 export default function Main() {
 	const { address } = useWalletConnectModal()
 	const width = Dimensions.get('window').width
@@ -49,15 +59,17 @@ export default function Main() {
 					style={{
 						width: width - 64,
 						height: 175,
+						marginTop: 12,
 					}}
 				>
-					<Swiper width={width - 64} height={175} showsPagination={false} loop autoplay>
-						<View testID="1">
-							<Image source={require('../assets/announce.jpg')} style={styles.announceImage} />
-						</View>
-						<View testID="2">
-							<Image source={require('../assets/announce-2.jpg')} style={styles.announceImage} />
-						</View>
+					<Swiper style={{ borderRadius: 8 }} width={width - 64} height={175} showsPagination={false} loop autoplay>
+						{[1, 2, 3].map((item, index) => {
+							return (
+								<View key={index}>
+									<Image source={announces[item]} style={styles.announceImage} />
+								</View>
+							)
+						})}
 					</Swiper>
 				</View>
 
@@ -132,9 +144,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	announceImage: {
-		marginTop: 24,
 		width: '100%',
-		height: 175,
+		borderRadius: 8,
 	},
 	listitem: {
 		marginRight: 10,
