@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
 import { Pressable, StyleSheet, Text, View, Button, Dimensions } from 'react-native'
-import lectures from '../constants/lectures'
 import { Stack, router } from 'expo-router'
+import { Picker } from '@react-native-picker/picker'
 
 import { Entypo } from '@expo/vector-icons'
 
 import LectureStorage from '../utils/LectureStorage'
 
+import LecturePicker from '../components/Picker'
+
 export default function ChooseLectures() {
 	const [selected, setSelected] = useState([])
+	const [category, setCategory] = useState('Math')
+	const [subjects, setSubjects] = useState([])
 
 	useEffect(() => {
 		LectureStorage.getLectures().then((lec) => {
@@ -16,12 +20,21 @@ export default function ChooseLectures() {
 		})
 	}, [])
 
+	useEffect(() => {
+		if (category === '') {
+			setSubjects([])
+		} else {
+			setSubjects(lectures.find((lecture) => lecture.title === category).subjects)
+		}
+	}, [category])
+
 	const width = Dimensions.get('window').width
 
 	return (
 		<View>
 			<Stack.Screen
 				options={{
+					headerShown: true,
 					headerTitleAlign: 'center',
 					headerTitle: 'Choose Lectures',
 					headerLeft: () => (
@@ -32,8 +45,11 @@ export default function ChooseLectures() {
 				}}
 			/>
 			<View style={styles.container}>
+				<View style={styles.picker}>
+					<LecturePicker selectedValue={category} onValueChange={(c) => setCategory(c)} />
+				</View>
 				<View style={styles.lectures}>
-					{lectures.map((lecture, index) => {
+					{subjects.map((lecture, index) => {
 						return (
 							<Pressable
 								onPress={() => {
@@ -56,7 +72,7 @@ export default function ChooseLectures() {
 								}}
 								key={index}
 							>
-								<Text>{lecture}</Text>
+								<Text style={{ textAlign: 'center' }}>{lecture}</Text>
 							</Pressable>
 						)
 					})}
@@ -70,6 +86,11 @@ const styles = StyleSheet.create({
 	container: {
 		marginTop: 16,
 		paddingHorizontal: 32,
+	},
+	picker: {
+		marginBottom: 8,
+		backgroundColor: '#fff',
+		borderRadius: 8,
 	},
 	lectures: {
 		display: 'flex',

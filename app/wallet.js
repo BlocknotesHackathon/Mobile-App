@@ -2,18 +2,18 @@ import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
 import { Stack, router } from 'expo-router'
 import { Entypo } from '@expo/vector-icons'
 
+// components
+import BackButton from '../components/BackButton'
+
 const WalletPage = () => {
 	return (
 		<View style={styles.container}>
 			<Stack.Screen
 				options={{
+					headerShown: true,
 					headerTitleAlign: 'center',
 					headerTitle: 'Wallet',
-					headerLeft: () => (
-						<Pressable onPress={() => router.replace('/menu')}>
-							<Entypo name="chevron-left" size={32} />
-						</Pressable>
-					),
+					headerLeft: () => <BackButton />,
 				}}
 			/>
 			<Text style={styles.balance}>Wallet Balance: $100</Text>

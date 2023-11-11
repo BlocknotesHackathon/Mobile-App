@@ -3,6 +3,7 @@ import { Stack, router } from 'expo-router'
 import menu from '../constants/menu'
 import { Entypo } from '@expo/vector-icons'
 import { useEffect, useState } from 'react'
+import SafeArea from '../components/SafeArea'
 export default function Menu() {
 	const [input, setInput] = useState('')
 	const [filter, setFilter] = useState(menu)
@@ -20,6 +21,7 @@ export default function Menu() {
 		<View>
 			<Stack.Screen
 				options={{
+					headerShown: true,
 					headerTitleAlign: 'center',
 					presentation: 'modal',
 					headerTitle: 'Menu',
