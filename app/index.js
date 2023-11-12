@@ -6,8 +6,17 @@ import { useEffect } from 'react'
 
 import Background from '../assets/background.png'
 import Logo from '../assets/logo_white.png'
-import Mockup from '../assets/mockup.png'
 import SafeArea from '../components/SafeArea'
+
+// Import the crypto getRandomValues shim (**BEFORE** the shims)
+import 'react-native-get-random-values'
+
+// Import the the ethers shims (**BEFORE** ethers)
+import '@ethersproject/shims'
+
+// Import the ethers library
+import { ethers } from 'ethers'
+import { Web3Provider } from '@ethersproject/providers'
 
 const projectId = 'b8451f154ab353ca87425174383cae84'
 
@@ -21,17 +30,17 @@ const providerMetadata = {
 		universal: 'YOUR_APP_UNIVERSAL_LINK.com',
 	},
 }
-
 export default function Home() {
 	const { open, isConnected, address, provider } = useWalletConnectModal()
-
 	useEffect(() => {
 		if (isConnected) {
+			//provider?.disconnect()
+
+			const _client = new ethers.providers.Web3Provider(provider)
+			const _signer = _client.getSigner()
+			console.log(_signer.address)
 			router.replace('/main')
 		}
-
-		//test
-		//provider?.disconnect()
 	})
 
 	return (
@@ -48,7 +57,6 @@ export default function Home() {
 				</View>
 				<View style={styles.row}>
 					<Text style={styles.bigtext}>Gain financial freedom while studying</Text>
-					<Image source={Mockup} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
 				</View>
 				<Pressable style={styles.button} onPress={open}>
 					<Text style={styles.button.text}>Connect Wallet</Text>

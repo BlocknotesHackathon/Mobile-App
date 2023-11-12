@@ -1,4 +1,4 @@
-import { Stack, Tabs, router } from 'expo-router'
+import { Stack, Tabs, router, Link } from 'expo-router'
 import { Text, View, StyleSheet, ScrollView, Image, ImageBackground, Pressable } from 'react-native'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -17,23 +17,25 @@ import shares from '../../dummydata/shares'
 export default function Main() {
 	const [lectures, setLectures] = useState([])
 	const [filteredShares, setFilteredShares] = useState([])
+	const [categories, setCategories] = useState([])
 
 	useEffect(() => {
-		LectureStorage.getLectures().then((res) => {
-			setLectures(res)
-
-			// lectures = my favorite lectures
-			// shares = all shares
-			// filteredShares = shares that are in my lectures
-			console.log('LECTURES')
-			console.log(res)
-			console.log('SHARES')
-			console.log(shares)
-			setFilteredShares(shares.filter((share) => res.includes(share.category)))
-			console.log('FİLTERED SHARES')
-			console.log(filteredShares)
+		LectureStorage.getLectures().then((lec) => {
+			setLectures(lec)
 		})
 	}, [])
+
+	useEffect(() => {
+		if (lectures.length > 0) {
+			const filtered = shares.filter((share) => lectures.includes(share.category))
+			setFilteredShares(filtered)
+		}
+	}, [lectures])
+
+	useEffect(() => {
+		const cats = [...new Set(filteredShares.map((share) => share.category))]
+		setCategories(cats)
+	}, [filteredShares])
 
 	return (
 		<SafeArea>
@@ -42,55 +44,47 @@ export default function Main() {
 					headerShown: false,
 				}}
 			/>
-			<View style={styles.container}>
+			<ScrollView style={styles.container}>
 				<Header />
 				<Slider />
-				<View>
-					<View style={{ ...styles.row, marginTop: 12 }}>
-						<Text style={styles.ahref}>Paylaşımlarım</Text>
-						<MaterialCommunityIcons name="chevron-right" size={24} />
-					</View>
-					<ScrollView horizontal showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-						<View style={styles.listitem}>
-							<Pressable>
-								<ImageBackground source={require('../../assets/examplenote.jpg')} style={styles.noteImage}>
-									<View style={styles.overlay}>
-										<View style={styles.overlay.row}>
-											<Text style={styles.overlay.text}>Türev İntegrale</Text>
-											<View style={styles.row}>
-												<MaterialCommunityIcons name="eye" size={12} style={styles.overlay.icon} />
-												<Text style={styles.overlay.count}>101</Text>
-											</View>
-										</View>
-									</View>
-								</ImageBackground>
-							</Pressable>
-						</View>
-					</ScrollView>
-				</View>
-
-				<View>
-					<View style={{ ...styles.row, marginTop: 12 }}>
-						<Text style={styles.ahref}>Son Cebir Notları</Text>
-						<MaterialCommunityIcons name="chevron-right" size={24} />
-					</View>
-					<ScrollView horizontal showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-						<Pressable>
-							<ImageBackground source={require('../../assets/examplenote.jpg')} style={styles.noteImage}>
-								<View style={styles.overlay}>
-									<View style={styles.overlay.row}>
-										<Text style={styles.overlay.text}>Cebirsel Bilmem Neler</Text>
-										<View style={styles.row}>
-											<MaterialCommunityIcons name="eye" size={12} style={styles.overlay.icon} />
-											<Text style={styles.overlay.count}>101</Text>
-										</View>
-									</View>
+				{categories.map((cat, index) => {
+					return (
+						<View style={{ marginTop: 12 }} key={index}>
+							<Link href={`/notes/lectures/${cat}`}>
+								<View style={{ ...styles.row, marginTop: 12 }}>
+									<Text style={styles.ahref}>{cat}</Text>
+									<MaterialCommunityIcons name="chevron-right" size={24} />
 								</View>
-							</ImageBackground>
-						</Pressable>
-					</ScrollView>
-				</View>
-			</View>
+							</Link>
+							<ScrollView horizontal showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+								{filteredShares.map((share, ind) => {
+									if (share.category === cat) {
+										return (
+											<Pressable
+												style={{
+													marginRight: 10,
+												}}
+												key={ind}
+												onPress={() => {
+													router.push(`/notes/lectures/${cat}/${share.title}`)
+												}}
+											>
+												<ImageBackground source={require('../../assets/examplenote.jpg')} style={styles.noteImage}>
+													<View style={styles.overlay}>
+														<View style={styles.overlay.row}>
+															<Text style={styles.overlay.text}>{share.title}</Text>
+														</View>
+													</View>
+												</ImageBackground>
+											</Pressable>
+										)
+									}
+								})}
+							</ScrollView>
+						</View>
+					)
+				})}
+			</ScrollView>
 		</SafeArea>
 	)
 }

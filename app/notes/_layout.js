@@ -9,6 +9,7 @@ export default function Layout() {
 				tabBarLabelStyle: {
 					display: 'none',
 				},
+				tabBarHideOnKeyboard: true,
 			}}
 		>
 			<Tabs.Screen
@@ -20,6 +21,7 @@ export default function Layout() {
 					},
 				}}
 			/>
+
 			<Tabs.Screen
 				name="share"
 				options={{
@@ -36,6 +38,13 @@ export default function Layout() {
 					tabBarIcon: ({ focused }) => {
 						return <Entypo size={24} name="list" color={focused && '#2e3192'} />
 					},
+				}}
+			/>
+
+			<Tabs.Screen
+				name="lectures"
+				options={{
+					href: null,
 				}}
 			/>
 		</Tabs>
