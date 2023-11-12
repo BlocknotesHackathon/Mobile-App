@@ -8,6 +8,8 @@ import sharesData from '../../../../../dummydata/shares'
 import { useEffect, useState } from 'react'
 import { useWalletConnectModal } from '@walletconnect/modal-react-native'
 
+import { usePrepareContractWrite, useContractWrite } from 'wagmi'
+
 function LecturePage() {
 	const { share } = useLocalSearchParams()
 	const { address } = useWalletConnectModal()
@@ -16,6 +18,22 @@ function LecturePage() {
 	useEffect(() => {
 		setData(sharesData.find((s) => s.title === share))
 	}, [])
+
+	const { config } = usePrepareContractWrite({
+		address: '0x4A3866aEe0be21Cb5E5D4265F6306B9Ddbf94bC8',
+		abi: [
+			{
+				name: 'transfer',
+				type: 'function',
+				stateMutability: 'nonpayable',
+				inputs: ['address', 'uint256'],
+				outputs: ['bool'],
+			},
+		],
+		functionName: 'transfer',
+	})
+
+	const { write } = useContractWrite(config)
 
 	return (
 		<View>
@@ -36,7 +54,7 @@ function LecturePage() {
 				</View>
 
 				{address == lecture.author && (
-					<Pressable style={styles.button.createauc}>
+					<Pressable onPress={() => write?.()} style={styles.button.createauc}>
 						<Text style={styles.button.text}>Create Auction</Text>
 					</Pressable>
 				)}
