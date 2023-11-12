@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Pressable, StyleSheet, Text, View, Button, Dimensions } from 'react-native'
 import { Stack, router } from 'expo-router'
-import { Picker } from '@react-native-picker/picker'
 
 import { Entypo } from '@expo/vector-icons'
 
@@ -28,6 +27,18 @@ export default function ChooseLectures() {
 		}
 	}, [category])
 
+	function handlePress(lecture) {
+		if (selected.includes(lecture)) {
+			setSelected(selected.filter((item) => item !== lecture))
+		} else {
+			setSelected([...selected, lecture])
+		}
+	}
+
+	useEffect(() => {
+		LectureStorage.setLectures(selected)
+	}, [selected])
+
 	const width = Dimensions.get('window').width
 
 	return (
@@ -52,15 +63,7 @@ export default function ChooseLectures() {
 					{subjects.map((lecture, index) => {
 						return (
 							<Pressable
-								onPress={() => {
-									if (selected.includes(lecture)) {
-										setSelected(selected.filter((item) => item !== lecture))
-									} else {
-										setSelected([...selected, lecture])
-									}
-
-									LectureStorage.setLectures(selected)
-								}}
+								onPress={() => handlePress(lecture)}
 								style={{
 									...styles.lecture,
 									width: (width - 90) / 3,

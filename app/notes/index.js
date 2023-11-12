@@ -8,7 +8,7 @@ import SafeArea from '../../components/SafeArea'
 import Header from '../../components/Header'
 import Slider from '../../components/Slider'
 
-import { getLectures } from '../../utils/LectureStorage'
+import LectureStorage from '../../utils/LectureStorage'
 import { useEffect, useState } from 'react'
 
 //test
@@ -19,20 +19,20 @@ export default function Main() {
 	const [filteredShares, setFilteredShares] = useState([])
 
 	useEffect(() => {
-		getLectures().then((res) => {
+		LectureStorage.getLectures().then((res) => {
 			setLectures(res)
-		})
 
-		// lectures = my favorite lectures
-		// shares = all shares
-		// filteredShares = shares that are in my lectures
-		console.log('LECTURES')
-		console.log(lectures)
-		console.log('SHARES')
-		console.log(shares)
-		setFilteredShares(shares.filter((share) => lectures.includes(share.category)))
-		console.log('FİLTERED SHARES')
-		console.log(filteredShares)
+			// lectures = my favorite lectures
+			// shares = all shares
+			// filteredShares = shares that are in my lectures
+			console.log('LECTURES')
+			console.log(res)
+			console.log('SHARES')
+			console.log(shares)
+			setFilteredShares(shares.filter((share) => res.includes(share.category)))
+			console.log('FİLTERED SHARES')
+			console.log(filteredShares)
+		})
 	}, [])
 
 	return (

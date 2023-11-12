@@ -1,19 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-async function setLectures(lectures) {
-	await AsyncStorage.setItem('lectures', JSON.stringify(lectures))
-}
-
-async function getLectures() {
-	const lectures = await AsyncStorage.getItem('lectures')
-	if (lectures) {
-		return JSON.parse(lectures)
-	} else {
-		return []
+export default class LectureStorage {
+	static async getLectures() {
+		try {
+			const value = await AsyncStorage.getItem('lectures')
+			if (value !== null) {
+				return JSON.parse(value)
+			}
+		} catch (e) {
+			console.log(e)
+		}
 	}
-}
 
-module.exports = {
-	setLectures,
-	getLectures,
+	static async setLectures(lectures) {
+		try {
+			await AsyncStorage.setItem('lectures', JSON.stringify(lectures))
+		} catch (e) {
+			console.log(e)
+		}
+	}
 }
