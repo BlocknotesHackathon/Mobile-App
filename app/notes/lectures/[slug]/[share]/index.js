@@ -27,13 +27,7 @@ function LecturePage() {
 					headerLeft: () => <BackButton />,
 				}}
 			/>
-			<RequestModal
-				isVisible={requestModalVisible}
-				isLoading={isLoading}
-				rpcResponse={isSuccess ? data?.toString() : undefined}
-				rpcError={isError ? 'Error reading contract' : undefined}
-				onClose={() => setRequetsModalVisible(false)}
-			/>
+
 			<View style={styles.container}>
 				<Image source={require('../../../../../assets/examplenote.jpg')} style={styles.noteImage} />
 				<View>
