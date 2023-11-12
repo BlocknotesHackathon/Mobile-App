@@ -15,7 +15,10 @@
     "@react-native-async-storage/async-storage": "1.18.2",
     "@react-native-community/netinfo": "9.3.10",
     "@react-native-picker/picker": "2.4.10",
+    "@walletconnect/ethereum-provider": "^2.10.4",
     "@walletconnect/modal-react-native": "^1.0.0-rc.14",
+    "@walletconnect/react-native-compat": "^2.10.4",
+    "@web3modal/wagmi-react-native": "^1.0.0-beta.2",
     "ethers": "^5.7.2",
     "expo": "~49.0.15",
     "expo-constants": "~14.4.2",
@@ -30,8 +33,9 @@
     "react-native-modal": "^13.0.1",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
-    "react-native-svg": "^13.14.0",
+    "react-native-svg": "13.9.0",
     "react-native-swiper": "^1.6.0",
+    "viem": "^1.18.9",
     "wagmi": "^1.4.6"
   },
   "expo": {

@@ -8,7 +8,7 @@ import sharesData from '../../../../../dummydata/shares'
 import { useEffect, useState } from 'react'
 import { useWalletConnectModal } from '@walletconnect/modal-react-native'
 
-import { usePrepareContractWrite, useContractWrite } from 'wagmi'
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi'
 
 function LecturePage() {
 	const { share } = useLocalSearchParams()
@@ -16,24 +16,38 @@ function LecturePage() {
 	const [lecture, setLecture] = useState([])
 
 	useEffect(() => {
-		setData(sharesData.find((s) => s.title === share))
+		setLecture(sharesData.find((s) => s.title === share))
 	}, [])
 
 	const { config } = usePrepareContractWrite({
-		address: '0x4A3866aEe0be21Cb5E5D4265F6306B9Ddbf94bC8',
+		address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
 		abi: [
 			{
-				name: 'transfer',
+				name: 'mint',
 				type: 'function',
 				stateMutability: 'nonpayable',
-				inputs: ['address', 'uint256'],
-				outputs: ['bool'],
+				inputs: [],
+				outputs: [],
 			},
 		],
-		functionName: 'transfer',
+		functionName: 'mint',
 	})
 
-	const { write } = useContractWrite(config)
+	const { data, write } = useContractWrite(config)
+
+	function tip() {
+		write?.()
+
+		if (isSuccess) {
+			console.log('success')
+		}
+
+		if (isLoading) {
+			console.log('loading')
+		}
+
+		console.log(data)
+	}
 
 	return (
 		<View>
@@ -54,7 +68,7 @@ function LecturePage() {
 				</View>
 
 				{address == lecture.author && (
-					<Pressable onPress={() => write?.()} style={styles.button.createauc}>
+					<Pressable onPress={tip} style={styles.button.createauc}>
 						<Text style={styles.button.text}>Create Auction</Text>
 					</Pressable>
 				)}
