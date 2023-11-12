@@ -8,16 +8,6 @@ import Background from '../assets/background.png'
 import Logo from '../assets/logo_white.png'
 import SafeArea from '../components/SafeArea'
 
-// Import the crypto getRandomValues shim (**BEFORE** the shims)
-import 'react-native-get-random-values'
-
-// Import the the ethers shims (**BEFORE** ethers)
-import '@ethersproject/shims'
-
-// Import the ethers library
-import { ethers } from 'ethers'
-import { Web3Provider } from '@ethersproject/providers'
-
 const projectId = 'b8451f154ab353ca87425174383cae84'
 
 const providerMetadata = {
@@ -35,10 +25,6 @@ export default function Home() {
 	useEffect(() => {
 		if (isConnected) {
 			//provider?.disconnect()
-
-			const _client = new ethers.providers.Web3Provider(provider)
-			const _signer = _client.getSigner()
-			console.log(_signer.address)
 			router.replace('/main')
 		}
 	})
