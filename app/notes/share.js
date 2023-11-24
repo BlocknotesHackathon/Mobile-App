@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Text, Pressable, Image, View, StyleSheet, TextInput } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Stack } from 'expo-router'
@@ -8,6 +8,9 @@ import placeholderImage from '../../assets/placeholder.png'
 
 import BackButton from '../../components/BackButton'
 
+import LecturePicker from '../../components/Picker'
+import { Picker } from '@react-native-picker/picker'
+
 export default function share() {
 	const [image, setImage] = useState(null)
 	const [width, setWidth] = useState(0)
@@ -15,6 +18,18 @@ export default function share() {
 
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
+
+	const [category, setCategory] = useState('Math')
+	const [subcategory, setSubcategory] = useState('')
+	const [subjects, setSubjects] = useState([])
+
+	useEffect(() => {
+		if (category === '') {
+			setSubjects([])
+		} else {
+			setSubjects(lectures.find((lecture) => lecture.title === category).subjects)
+		}
+	}, [category])
 
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
@@ -74,6 +89,15 @@ export default function share() {
 									multiline={true}
 								/>
 							</View>
+							<LecturePicker selectedValue={category} onValueChange={(c) => setCategory(c)} />
+							{category.length > 0 && (
+								<Picker selectedValue={subcategory} onValueChange={(c) => setSubcategory(c)}>
+									{subjects.map((subject, index) => {
+										return <Picker.Item label={subject} value={subject} key={index} />
+									})}
+								</Picker>
+							)}
+
 							<Pressable style={styles.button} onPress={handleSubmit}>
 								<Text style={styles.button.text}>Share</Text>
 							</Pressable>

@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingHorizontal: 32,
+		marginBottom: 32,
 	},
 	row: {
 		display: 'flex',

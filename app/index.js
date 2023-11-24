@@ -1,30 +1,24 @@
 import { View, Text, Pressable, ImageBackground, StyleSheet, Image } from 'react-native'
 import { router } from 'expo-router'
 
-import { WalletConnectModal, useWalletConnectModal } from '@walletconnect/modal-react-native'
 import { useEffect } from 'react'
 
 import Background from '../assets/background.png'
 import Logo from '../assets/logo_white.png'
 import SafeArea from '../components/SafeArea'
 
-const projectId = 'b8451f154ab353ca87425174383cae84'
+import { W3mButton } from '@web3modal/wagmi-react-native'
 
-const providerMetadata = {
-	name: 'BLOCKNOTES',
-	description: 'Lecture Notes in Blockchain',
-	url: 'exp://192.168.1.159:8081',
-	icons: ['https://your-project-logo.com/'],
-	redirect: {
-		native: 'YOUR_APP_SCHEME://',
-		universal: 'YOUR_APP_UNIVERSAL_LINK.com',
-	},
-}
+import { useAccount, useConnect, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi'
 export default function Home() {
-	const { open, isConnected, address, provider } = useWalletConnectModal()
+	const { address, connector, isConnected } = useAccount()
+	const { data: ensAvatar } = useEnsAvatar({ address })
+	const { data: ensName } = useEnsName({ address })
+	const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
+	const { disconnect } = useDisconnect()
+
 	useEffect(() => {
 		if (isConnected) {
-			//provider?.disconnect()
 			router.replace('/main')
 		}
 	})
@@ -32,21 +26,15 @@ export default function Home() {
 	return (
 		<SafeArea>
 			<ImageBackground source={Background} style={styles.background}>
-				<WalletConnectModal
-					projectId={projectId}
-					providerMetadata={providerMetadata}
-					accentColor="#2e3192"
-					themeMode="light"
-				/>
 				<View style={styles.center}>
 					<Image source={Logo} style={{ width: 300, height: 100, resizeMode: 'contain' }} />
 				</View>
 				<View style={styles.row}>
 					<Text style={styles.bigtext}>Gain financial freedom while studying</Text>
 				</View>
-				<Pressable style={styles.button} onPress={open}>
-					<Text style={styles.button.text}>Connect Wallet</Text>
-				</Pressable>
+				<W3mButton />
+
+				{error && <Text>{error.message}</Text>}
 			</ImageBackground>
 		</SafeArea>
 	)

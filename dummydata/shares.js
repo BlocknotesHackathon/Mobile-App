@@ -25,7 +25,7 @@ const shares = [
 	},
 	{
 		author: '0x2222222222222222222222222222222222222222',
-		title: 'Calculus',
+		title: 'Calculus II',
 		category: 'Calculus',
 		description: 'This lecture note covers the basics of calculus II.',
 	},

@@ -18,6 +18,7 @@
     "@walletconnect/ethereum-provider": "^2.10.4",
     "@walletconnect/modal-react-native": "^1.0.0-rc.14",
     "@walletconnect/react-native-compat": "^2.10.4",
+    "@web3modal/core-react-native": "^1.0.0-beta.2",
     "@web3modal/wagmi-react-native": "^1.0.0-beta.2",
     "ethers": "^5.7.2",
     "expo": "~49.0.15",
@@ -35,8 +36,11 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-swiper": "^1.6.0",
-    "viem": "^1.18.9",
-    "wagmi": "^1.4.6"
+    "text-encoding": "^0.7.0",
+    "text-encoding-polyfill": "^0.6.7",
+    "viem": "^1.19.0",
+    "wagmi": "^1.4.6",
+    "expo-crypto": "~12.4.1"
   },
   "expo": {
     "install": {

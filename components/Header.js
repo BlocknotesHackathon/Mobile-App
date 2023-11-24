@@ -3,8 +3,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useWalletConnectModal } from '@walletconnect/modal-react-native'
 import { router } from 'expo-router'
 
+import { useAccount } from 'wagmi'
+
 export default function Header() {
-	const { address } = useWalletConnectModal()
+	const { address } = useAccount()
 
 	return (
 		<View style={styles.topbar}>
